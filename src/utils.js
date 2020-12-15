@@ -17,10 +17,19 @@ const getRandomDate = (start, end) => {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 };
 
+const shuffle = (someArray) => {
+  for (let i = someArray.length - 1; i > 0; i--) {
+    const randomPosition = getRandomIndexArr(someArray);
+    [someArray[i], someArray[randomPosition]] = [someArray[randomPosition], someArray[i]];
+  }
+
+  return someArray;
+};
+
 module.exports = {
   generateRandomInt,
   getRandomIndexArr,
   getRandomElementArr,
   getRandomDate,
-
+  shuffle
 };

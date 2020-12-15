@@ -1,7 +1,7 @@
 'use strict';
 
 const fs = require(`fs`);
-const {generateRandomInt, getRandomElementArr, getRandomDate} = require(`../../utils`);
+const {generateRandomInt, getRandomElementArr, getRandomDate, shuffle} = require(`../../utils`);
 const {ExitCode} = require(`../../const`);
 
 const DEFAULT_COUNT = 1;
@@ -64,9 +64,9 @@ const generatePosts = (count) => {
   return Array(count).fill({}).map(() => ({
     title: getRandomElementArr(TITLES),
     createdDate: getRandomElementArr(CREATED_DATES),
-    announce: ANNOUNCES.slice(generateRandomInt(0, 4), generateRandomInt(0, 4)).join(` `),
-    fullText: ANNOUNCES.slice(generateRandomInt(0, ANNOUNCES.length - 1), generateRandomInt(0, ANNOUNCES.length - 1)).join(` `),
-    сategory: CATEGORIES.slice(generateRandomInt(0, CATEGORIES.length - 1))
+    announce: shuffle(ANNOUNCES).slice(generateRandomInt(0, 5)).join(` `),
+    fullText: shuffle(ANNOUNCES).slice(generateRandomInt(0, ANNOUNCES.length - 1)).join(` `),
+    сategory: shuffle(CATEGORIES).slice(generateRandomInt(0, CATEGORIES.length - 1))
   }));
 };
 
