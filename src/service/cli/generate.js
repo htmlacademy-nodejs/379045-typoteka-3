@@ -70,6 +70,19 @@ const generatePosts = (count) => {
   }));
 };
 
+const writeData = (fileName, data) => {
+
+  const content = JSON.stringify(data);
+
+  fs.writeFile(fileName, content, (err) => {
+    if (err) {
+      return console.error(`Can't write data to file...`);
+    }
+
+    return console.info(`Operation success. File created.`);
+  });
+};
+
 module.exports = {
   name: `--generate`,
   run(args = []) {
@@ -81,14 +94,8 @@ module.exports = {
       process.exit(ExitCode.error);
     }
 
-    const content = JSON.stringify(generatePosts(counter));
+    const content = generatePosts(counter);
 
-    fs.writeFile(FILE_NAME, content, (err) => {
-      if (err) {
-        return console.error(`Can't write data to file...`);
-      }
-
-      return console.info(`Operation success. File created.`);
-    });
+    writeData(FILE_NAME, content);
   }
 };
