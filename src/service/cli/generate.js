@@ -79,7 +79,8 @@ const writeJsonFile = (fileName, data) => {
     fs.writeFileSync(fileName, jsonData);
     return console.info(chalk.green(`Operation success. File created.`));
   } catch (err) {
-    return console.error(chalk.red(`Can't write data to file...`));
+    console.error(chalk.red(`Can't write data to file...`));
+    throw err;
   }
 
 };
