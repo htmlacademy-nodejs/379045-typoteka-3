@@ -70,11 +70,11 @@ const generatePosts = (count) => {
   }));
 };
 
-const writeData = (fileName, data) => {
+const writeJsonFile = (fileName, data) => {
 
-  const content = JSON.stringify(data);
+  const jsonData = JSON.stringify(data);
 
-  fs.writeFile(fileName, content, (err) => {
+  fs.writeFileSync(fileName, jsonData, (err) => {
     if (err) {
       return console.error(`Can't write data to file...`);
     }
@@ -94,8 +94,8 @@ module.exports = {
       process.exit(ExitCode.error);
     }
 
-    const content = generatePosts(counter);
+    const postsData = generatePosts(counter);
 
-    writeData(FILE_NAME, content);
+    writeJsonFile(FILE_NAME, postsData);
   }
 };
