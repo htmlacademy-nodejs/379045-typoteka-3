@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Alexb1130/379045-typoteka-3#readme",
   "devDependencies": {
+    "chalk": "4.1.0",
     "eslint": "7.15.0",
     "eslint-config-htmlacademy": "0.6.0"
   }
