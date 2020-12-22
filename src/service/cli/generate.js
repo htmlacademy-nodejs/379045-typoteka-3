@@ -22,7 +22,7 @@ const generatePosts = (count, titles, categories, sentences, dates) => {
   }));
 };
 
-const readTxtFile = async (filePath) => {
+const generateDataFromTxtFile = async (filePath) => {
 
   let data = [];
 
@@ -56,9 +56,9 @@ module.exports = {
   async run(args = []) {
     const [count] = args;
     const counter = parseInt(count, 10) || DEFAULT_COUNT;
-    const sentences = await readTxtFile(FILE_SENTENCES_PATH);
-    const titles = await readTxtFile(FILE_TITLES_PATH);
-    const categories = await readTxtFile(FILE_CATEGORIES_PATH);
+    const sentences = await generateDataFromTxtFile(FILE_SENTENCES_PATH);
+    const titles = await generateDataFromTxtFile(FILE_TITLES_PATH);
+    const categories = await generateDataFromTxtFile(FILE_CATEGORIES_PATH);
     const createdDates = titles.map(() => getRandomDate(new Date(2020, 9, 1), new Date()));
 
     if (counter > MAX_COUNT) {
