@@ -1,6 +1,6 @@
 'use strict';
 
-const fs = require(`fs`);
+const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 const {generateRandomInt, getRandomElementArr, getRandomDate, shuffle} = require(`../../utils`);
 const {ExitCode} = require(`../../const`);
@@ -71,12 +71,12 @@ const generatePosts = (count) => {
   }));
 };
 
-const writeJsonFile = (fileName, data) => {
+const writeJsonFile = async (fileName, data) => {
 
   const jsonData = JSON.stringify(data);
 
   try {
-    fs.writeFileSync(fileName, jsonData);
+    await fs.writeFile(fileName, jsonData);
     return console.info(chalk.green(`Operation success. File created.`));
   } catch (err) {
     console.error(chalk.red(`Can't write data to file...`));
