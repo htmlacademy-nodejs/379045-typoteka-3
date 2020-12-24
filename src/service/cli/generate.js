@@ -24,17 +24,13 @@ const generatePosts = (count, titles, categories, sentences, dates) => {
 
 const generateDataFromTxtFile = async (filePath) => {
 
-  let data = [];
-
   try {
-    data = await fs.readFile(filePath, `utf8`);
+    const data = await fs.readFile(filePath, `utf8`);
+    return data.split(`\n`).filter((item) => item !== ``);
   } catch (err) {
-    data = [];
     console.error(chalk.red(err));
     throw err;
   }
-
-  return data.split(`\n`).filter((item) => item !== ``);
 };
 
 const writeJsonFile = async (fileName, data) => {
