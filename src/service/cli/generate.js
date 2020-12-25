@@ -3,11 +3,10 @@
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 const {generateRandomInt, getRandomElementArr, getRandomDate, shuffle} = require(`../../utils`);
-const {ExitCode} = require(`../../const`);
+const {ExitCode, FILE_NAME} = require(`../../const`);
 
 const DEFAULT_COUNT = 1;
 const MAX_COUNT = 1000;
-const FILE_NAME = `mocks.json`;
 const FILE_SENTENCES_PATH = `./data/sentences.txt`;
 const FILE_TITLES_PATH = `./data/titles.txt`;
 const FILE_CATEGORIES_PATH = `./data/categories.txt`;
