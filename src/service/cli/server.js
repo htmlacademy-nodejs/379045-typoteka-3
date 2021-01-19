@@ -2,10 +2,10 @@
 
 const express = require(`express`);
 const chalk = require(`chalk`);
-const fs = require(`fs`).promises;
-const {FILE_NAME, HttpCode} = require(`../../const`);
+const {HttpCode} = require(`../../const`);
 const DEFAULT_PORT = 3000;
 const FILE_ERROR = `ENOENT`;
+const getMockData = require(`../lib/get-mock-data`);
 
 const app = express();
 
@@ -13,14 +13,14 @@ app.use(express.json());
 
 app.get(`/posts`, async (req, res) => {
   try {
-    const fileContent = await fs.readFile(FILE_NAME);
-    const mocks = JSON.parse(fileContent);
+    const mocks = await getMockData();
     res.json(mocks);
 
   } catch (err) {
 
     if (err.code === FILE_ERROR) {
-      return res.status(HttpCode.OK).send([]);
+      res.status(HttpCode.OK).send([]);
+      return;
     }
 
     res.status(HttpCode.INTERNAL_SERVER_ERROR).send(err);
