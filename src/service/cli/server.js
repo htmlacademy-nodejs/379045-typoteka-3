@@ -16,7 +16,7 @@ app.get(`/posts`, async (req, res) => {
     res.json(mocks);
 
   } catch (err) {
-    res.status(HttpCode.INTERNAL_SERVER_ERROR).send([]);
+    res.status(HttpCode.INTERNAL_SERVER_ERROR).send(err);
   }
 });
 
