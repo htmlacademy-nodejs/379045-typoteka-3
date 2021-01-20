@@ -1,54 +1,29 @@
 'use strict';
 
+const express = require(`express`);
 const chalk = require(`chalk`);
-const http = require(`http`);
-const fs = require(`fs`).promises;
-const {FILE_NAME, HttpCode} = require(`../../const`);
+const {HttpCode} = require(`../../const`);
 const DEFAULT_PORT = 3000;
+const getMockData = require(`../lib/get-mock-data`);
 
-const sendResponse = (res, statusCode, message) => {
-  const template = `
-    <!Doctype html>
-      <html lang="ru">
-      <head>
-        <title>Типотека</title>
-      </head>
-      <body>${message}</body>
-    </html>`.trim();
+const app = express();
 
-  res.statusCode = statusCode;
-  res.writeHead(statusCode, {
-    'Content-Type': `text/html; charset=UTF-8`,
-  });
+app.use(express.json());
 
-  res.end(template);
-};
+app.get(`/posts`, async (req, res) => {
+  try {
+    const mocks = await getMockData();
+    res.json(mocks);
 
-const onClientConnect = async (req, res) => {
-  const notFoundMessageText = `Not found`;
-
-  switch (req.url) {
-
-    case `/`:
-
-      try {
-        const fileContent = await fs.readFile(FILE_NAME);
-        const mocks = JSON.parse(fileContent);
-        const listItems = mocks.map((item) => `<li>${item.title}</li>`).join(``);
-        const list = `<ul>${listItems}</ul>`;
-
-        sendResponse(res, HttpCode.OK, list);
-      } catch (err) {
-        sendResponse(res, HttpCode.NOT_FOUND, notFoundMessageText);
-      }
-      break;
-
-    default:
-      sendResponse(res, HttpCode.NOT_FOUND, notFoundMessageText);
+  } catch (err) {
+    res.status(HttpCode.INTERNAL_SERVER_ERROR).send(err);
   }
-};
+});
 
-const httpServer = http.createServer(onClientConnect);
+app.use((req, res) => {
+  res.status(HttpCode.NOT_FOUND).send(`Not Found`);
+});
+
 
 module.exports = {
   name: `--server`,
@@ -56,14 +31,12 @@ module.exports = {
     const [customPort] = args;
     const port = Number.parseInt(customPort, 10) || DEFAULT_PORT;
 
-    httpServer
-      .listen(port)
-      .on(`listening port: ${port}`, (err) => {
-        if (err) {
-          return console.error(`Ошибка при создании сервера`, err);
-        }
+    app.listen(port, (err) => {
+      if (err) {
+        return console.error(`Ошибка при создании сервера`, err);
+      }
 
-        return console.info(chalk.green(`Ожидаю соединений на ${port}`));
-      });
+      return console.info(chalk.green(`Ожидаю соединений на ${port}`));
+    });
   }
 };
