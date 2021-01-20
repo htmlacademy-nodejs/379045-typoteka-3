@@ -4,7 +4,6 @@ const express = require(`express`);
 const chalk = require(`chalk`);
 const {HttpCode} = require(`../../const`);
 const DEFAULT_PORT = 3000;
-const FILE_ERROR = `ENOENT`;
 const getMockData = require(`../lib/get-mock-data`);
 
 const app = express();
@@ -17,13 +16,7 @@ app.get(`/posts`, async (req, res) => {
     res.json(mocks);
 
   } catch (err) {
-
-    if (err.code === FILE_ERROR) {
-      res.status(HttpCode.OK).send([]);
-      return;
-    }
-
-    res.status(HttpCode.INTERNAL_SERVER_ERROR).send(err);
+    res.status(HttpCode.INTERNAL_SERVER_ERROR).send([]);
   }
 });
 
