@@ -5,6 +5,7 @@ const DEFAULT_COMMAND = `--help`;
 const USER_ARGV_INDEX = 2;
 const USER_ARGV_ANOTHER_COMMANDS_INDEX = 1;
 const FILE_NAME = `mocks.json`;
+const API_PREFIX = `/api`;
 
 const ExitCode = {
   error: 1,
@@ -17,6 +18,8 @@ const HttpCode = {
   INTERNAL_SERVER_ERROR: 500,
   FORBIDDEN: 403,
   UNAUTHORIZED: 401,
+  BAD_REQUEST: 400,
+  CREATED: 201
 };
 
 module.exports = {
@@ -25,5 +28,6 @@ module.exports = {
   USER_ARGV_ANOTHER_COMMANDS_INDEX,
   ExitCode,
   HttpCode,
-  FILE_NAME
+  FILE_NAME,
+  API_PREFIX
 };
