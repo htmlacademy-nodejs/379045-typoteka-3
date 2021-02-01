@@ -11,7 +11,7 @@ module.exports = (app, service) => {
 
   route.get(`/`, (req, res) => {
     const articles = service.getAll();
-    res.status(HttpCode.OK).json(articles);
+    return res.status(HttpCode.OK).json(articles);
   });
 
   route.get(`/:articleId`, (req, res) => {
@@ -37,8 +37,7 @@ module.exports = (app, service) => {
     const existArticle = service.getOne(articleId);
 
     if (!existArticle) {
-      return res.status(HttpCode.NOT_FOUND)
-        .send(`Not found with ${articleId}`);
+      return res.status(HttpCode.NOT_FOUND).send(`Not found with ${articleId}`);
     }
 
     const updatedArticle = service.update(articleId, req.body);
@@ -52,8 +51,7 @@ module.exports = (app, service) => {
     const article = service.delete(articleId);
 
     if (!article) {
-      return res.status(HttpCode.NOT_FOUND)
-        .send(`Not found with ${articleId}`);
+      return res.status(HttpCode.NOT_FOUND).send(`Not found with ${articleId}`);
     }
 
     return res.status(HttpCode.OK).json(article);
@@ -65,8 +63,7 @@ module.exports = (app, service) => {
     const article = service.getOne(articleId);
 
     if (!article) {
-      return res.status(HttpCode.NOT_FOUND)
-        .send(`Not found with ${articleId}`);
+      return res.status(HttpCode.NOT_FOUND).send(`Not found with ${articleId}`);
     }
 
     return res.status(HttpCode.OK).json(article.comments);
@@ -78,8 +75,7 @@ module.exports = (app, service) => {
     const deletedComment = service.deletedComment(articleId, commentId);
 
     if (!deletedComment) {
-      return res.status(HttpCode.NOT_FOUND)
-        .send(`Not found with ${articleId}`);
+      return res.status(HttpCode.NOT_FOUND).send(`Not found with ${articleId}`);
     }
 
     return res.status(HttpCode.OK).json(deletedComment);
@@ -91,8 +87,7 @@ module.exports = (app, service) => {
     const newComment = service.createComment(articleId, req.body);
 
     if (!newComment) {
-      return res.status(HttpCode.NOT_FOUND)
-        .send(`Not found with ${articleId}`);
+      return res.status(HttpCode.NOT_FOUND).send(`Not found with ${articleId}`);
     }
 
     return res.status(HttpCode.OK).json(newComment);

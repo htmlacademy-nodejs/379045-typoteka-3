@@ -10,6 +10,6 @@ module.exports = (app, service) => {
 
   route.get(`/`, (req, res) => {
     const categories = service.getAll();
-    res.status(HttpCode.OK).json(categories);
+    return res.status(HttpCode.OK).json(categories);
   });
 };

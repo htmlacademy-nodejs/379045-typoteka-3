@@ -12,14 +12,13 @@ module.exports = (app, service) => {
     const {query} = req.query;
 
     if (!query) {
-      res.status(HttpCode.BAD_REQUEST).json([]);
-      return;
+      return res.status(HttpCode.BAD_REQUEST).json([]);
     }
 
     const searchResults = service.getAll(query);
     const searchStatus = searchResults.length > 0 ? HttpCode.OK : HttpCode.NOT_FOUND;
 
-    res.status(searchStatus).json(searchResults);
+    return res.status(searchStatus).json(searchResults);
 
   });
 };
