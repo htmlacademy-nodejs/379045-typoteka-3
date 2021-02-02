@@ -2,9 +2,10 @@
 
 const express = require(`express`);
 const chalk = require(`chalk`);
-const {HttpCode} = require(`../../const`);
+const {HttpCode, API_PREFIX} = require(`../../const`);
 const DEFAULT_PORT = 3000;
 const getMockData = require(`../lib/get-mock-data`);
+const routes = require(`../api`);
 
 const app = express();
 
@@ -19,6 +20,8 @@ app.get(`/posts`, async (req, res) => {
     res.status(HttpCode.INTERNAL_SERVER_ERROR).send(err);
   }
 });
+
+app.use(API_PREFIX, routes);
 
 app.use((req, res) => {
   res.status(HttpCode.NOT_FOUND).send(`Not Found`);
