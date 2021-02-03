@@ -28,7 +28,7 @@ const generatePosts = (count, titles, categories, sentences, dates, comments = [
     createdDate: getRandomElementArr(dates),
     announce: shuffle(sentences).slice(generateRandomInt(0, 5)).join(` `),
     fullText: shuffle(sentences).slice(generateRandomInt(0, sentences.length - 1)).join(` `),
-    сategory: shuffle(categories).slice(generateRandomInt(0, categories.length - 1)),
+    category: shuffle(categories).slice(generateRandomInt(0, categories.length - 1)),
     comments: generateComments(generateRandomInt(1, MAX_COMMENTS_COUNT), comments)
   }));
 };

@@ -2,7 +2,7 @@
 
 const {nanoid} = require(`nanoid`);
 
-class ArcicleService {
+class ArticleService {
   constructor(articles) {
     this._articles = articles;
   }
@@ -16,7 +16,7 @@ class ArcicleService {
   }
 
   getComments(postId) {
-    const post = this.findOne(postId);
+    const post = this.getOne(postId);
 
     return post.comments;
   }
@@ -29,7 +29,7 @@ class ArcicleService {
   }
 
   createComment(id, comment) {
-    const post = this.findOne(id);
+    const post = this.getOne(id);
     comment.id = nanoid();
     post.comments.push(comment);
 
@@ -37,7 +37,7 @@ class ArcicleService {
   }
 
   update(id, post) {
-    const oldPost = this.findOne(id);
+    const oldPost = this.getOne(id);
 
     return Object.assign(oldPost, post);
   }
@@ -50,14 +50,18 @@ class ArcicleService {
     return deletedPost[0];
   }
 
-  geleteComment(postId, commentId) {
-    const post = this.findOne(postId);
+  deleteComment(postId, commentId) {
+    const post = this.getOne(postId);
     const commentIndex = post.comments.findIndex((comment) => comment.id === commentId);
-    const deletedComment = post.comments.splice(commentIndex, 1);
+    let deletedComment;
+
+    if (commentIndex > -1) {
+      deletedComment = post.comments.splice(commentIndex, 1);
+    }
 
     return deletedComment[0];
   }
 
 }
 
-module.exports = ArcicleService;
+module.exports = ArticleService;

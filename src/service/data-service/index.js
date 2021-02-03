@@ -1,11 +1,11 @@
 'use strict';
 
-const ArcicleService = require(`./article`);
+const ArticleService = require(`./article`);
 const CategoryService = require(`./category`);
 const SearchService = require(`./search`);
 
 module.exports = {
-  ArcicleService,
+  ArticleService,
   CategoryService,
   SearchService
 };
