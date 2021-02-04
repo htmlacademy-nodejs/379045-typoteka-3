@@ -22,6 +22,11 @@ const HttpCode = {
   CREATED: 201
 };
 
+const Env = {
+  DEVELOPMENT: `development`,
+  PRODUCTION: `production`
+};
+
 module.exports = {
   DEFAULT_COMMAND,
   USER_ARGV_INDEX,
@@ -29,5 +34,6 @@ module.exports = {
   ExitCode,
   HttpCode,
   FILE_NAME,
-  API_PREFIX
+  API_PREFIX,
+  Env
 };
