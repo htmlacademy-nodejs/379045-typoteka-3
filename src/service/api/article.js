@@ -4,9 +4,10 @@ const {Router} = require(`express`);
 const {HttpCode} = require(`../../const`);
 const articleValidator = require(`../middlewares/article-validator`);
 
-const route = new Router();
-
 module.exports = (app, service) => {
+
+  const route = new Router();
+
   app.use(`/articles`, route);
 
   route.get(`/`, (req, res) => {

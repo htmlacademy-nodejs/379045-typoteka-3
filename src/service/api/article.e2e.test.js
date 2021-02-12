@@ -11,14 +11,15 @@ const {HttpCode} = require(`../../const`);
 const createApi = () => {
   const app = express();
   const cloneData = JSON.parse(JSON.stringify(getMockData()));
+  const service = new DataService(cloneData);
   app.use(express.json());
-  article(app, new DataService(cloneData));
+  article(app, service);
 
-  return app;
+  return {app, service};
 };
 
 describe(`API returns a list of all articles`, () => {
-  const app = createApi();
+  const {app} = createApi();
   let response;
 
   beforeAll(async () => {
@@ -33,7 +34,7 @@ describe(`API returns a list of all articles`, () => {
 });
 
 describe(`API returns an article with given id`, () => {
-  const app = createApi();
+  const {app} = createApi();
   let response;
 
   beforeAll(async () => {
@@ -47,7 +48,7 @@ describe(`API returns an article with given id`, () => {
 });
 
 describe(`API creates an article if data is valid`, () => {
-  const app = createApi();
+  const {app} = createApi();
   let response;
 
   const newArticle = {
@@ -68,7 +69,7 @@ describe(`API creates an article if data is valid`, () => {
 });
 
 describe(`API refuses to create an article if data is invalid`, () => {
-  const app = createApi();
+  const {app} = createApi();
 
   const newArticle = {
     title: `Article title`,
@@ -88,7 +89,7 @@ describe(`API refuses to create an article if data is invalid`, () => {
 });
 
 describe(`API changes existent article`, () => {
-  const app = createApi();
+  const {app, service} = createApi();
   let response;
 
   const newArticle = {
@@ -107,13 +108,14 @@ describe(`API changes existent article`, () => {
 
   test(`Returns changed article`, () => expect(response.body).toEqual(expect.objectContaining(newArticle)));
 
-  test(`Article is really changed`, () => request(app)
-    .get(`/articles/zKwsS9YujJ69sx4CPfs1O`)
-    .expect((res) => expect(res.body.title).toBe(`Article title`)));
+  test(`Article is really changed`, () => {
+    const changedArticle = service.getAll().find((item) => item.id === `zKwsS9YujJ69sx4CPfs1O`);
+    return expect(changedArticle.title).toBe(`Article title`);
+  });
 });
 
 test(`API returns status code 404 when trying to change non-existent article`, () => {
-  const app = createApi();
+  const {app} = createApi();
 
   const newArticle = {
     title: `Article title`,
@@ -127,7 +129,7 @@ test(`API returns status code 404 when trying to change non-existent article`, (
 });
 
 test(`API returns status code 400 when trying to change an article with invalid data`, () => {
-  const app = createApi();
+  const {app} = createApi();
 
   const invalidArticle = {
     title: `Article invalid`,
@@ -139,7 +141,7 @@ test(`API returns status code 400 when trying to change an article with invalid 
 });
 
 describe(`API correctly deletes an article`, () => {
-  const app = createApi();
+  const {app, service} = createApi();
   let response;
 
   beforeAll(async () => {
@@ -150,20 +152,18 @@ describe(`API correctly deletes an article`, () => {
 
   test(`Returns deleted article`, () => expect(response.body.id).toBe(`zKwsS9YujJ69sx4CPfs1O`));
 
-  test(`Article count is 2 now`, () => {
-    return request(app).get(`/articles`).expect((res) => expect(res.body.length).toBe(2));
-  });
+  test(`Article count is 2 now`, () => expect(service.getAll().length).toBe(2));
 });
 
 test(`API refuses to create a comment to non-existent article and returns status code 404`, () => {
-  const app = createApi();
+  const {app} = createApi();
 
   return request(app).post(`/articles/none/comments`).send({text: `Неважно`}).expect(HttpCode.NOT_FOUND);
 
 });
 
 test(`API refuses to delete non-existent comment`, () => {
-  const app = createApi();
+  const {app} = createApi();
 
   return request(app).delete(`/articles/zKwsS9YujJ69sx4CPfs1O/comments/none`).expect(HttpCode.NOT_FOUND);
 
