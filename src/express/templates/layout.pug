@@ -1,6 +1,13 @@
 block vars
   - var isWrapperColor = false;
 
+mixin createNote(note)
+  li.notes__list-item
+    time.notes__item-time(datetime='2019-03-21T20:33')= note.createdDate
+    a.notes__item-text(href='#')= note.title
+    button.notes__button.button.button--close-item(type='button')
+      span.visually-hidden Закрыть строку списка
+
 doctype html
 html(lang='ru')
   head
@@ -9,9 +16,9 @@ html(lang='ru')
     meta(name='description' content='Личный блог Типотека')
     meta(http-equiv='X-UA-Compatible' content='ie=edge')
     title Типотека
-    link(rel='preload' href='./fonts/Inter-Regular.woff2' as='font' crossorigin='anonymous')
-    link(rel='preload' href='./fonts/Inter-Medium.woff2' as='font' crossorigin='anonymous')
-    link(rel='preload' href='./fonts/SFProDisplay-Regular.woff2' as='font' crossorigin='anonymous')
+    link(rel='preload' href='/fonts/Inter-Regular.woff2' as='font' crossorigin='anonymous')
+    link(rel='preload' href='/fonts/Inter-Medium.woff2' as='font' crossorigin='anonymous')
+    link(rel='preload' href='/fonts/SFProDisplay-Regular.woff2' as='font' crossorigin='anonymous')
     link(rel='stylesheet' href='/css/style.min.css')
   body
     div(class= isWrapperColor ? 'wrapper-color' : 'wrapper')
@@ -21,5 +28,5 @@ html(lang='ru')
 
       include partials/footer.pug
 
-    script(src='js/vendor.js')
-    script(src='js/main.js')
+    script(src='/js/vendor.js')
+    script(src='/js/main.js')

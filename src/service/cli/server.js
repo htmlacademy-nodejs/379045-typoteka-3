@@ -3,7 +3,6 @@
 const express = require(`express`);
 const {HttpCode, API_PREFIX, ExitCode} = require(`../../const`);
 const DEFAULT_PORT = 3000;
-const getMockData = require(`../lib/get-mock-data`);
 const routes = require(`../api`);
 const {getLogger} = require(`../lib/logger`);
 
@@ -12,14 +11,12 @@ const logger = getLogger({name: `api`});
 
 app.use(express.json());
 
-app.get(`/posts`, async (req, res) => {
-  try {
-    const mocks = await getMockData();
-    res.json(mocks);
-
-  } catch (err) {
-    res.status(HttpCode.INTERNAL_SERVER_ERROR).send(err);
-  }
+app.use((req, res, next) => {
+  logger.debug(`Request on route ${req.url}`);
+  res.on(`finish`, () => {
+    logger.info(`Response status code ${res.statusCode}`);
+  });
+  next();
 });
 
 app.use(API_PREFIX, routes);
@@ -31,14 +28,6 @@ app.use((req, res) => {
 
 app.use((err, _req, _res, _next) => {
   logger.error(`An error occurred on processing request: ${err.message}`);
-});
-
-app.use((req, res, next) => {
-  logger.debug(`Request on route ${req.url}`);
-  res.on(`finish`, () => {
-    logger.info(`Response status code ${res.statusCode}`);
-  });
-  next();
 });
 
 module.exports = {

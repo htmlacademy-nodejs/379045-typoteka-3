@@ -6,11 +6,21 @@ block vars
 block content
   main
     section.search-page
-      .search-page__wrapper
+      .search-page__wrapper(class= results.length === 0 ? 'search-page__wrapper--empty' : '')
         h1 Поиск
         .search.search-page__form
-          form(action='#' method='get')
+          form(method='get' action="/search" autocomplete="off")
             label
               input(type='text' name='search' placeholder='Что ищем?')
             button.search__button.button.button--transparent(type='submit') Найти
+
+          if results.length === 0
+            p.search-page__empty Ничего не нашлось
+
+          else
+            each result in results
+              .search__result
+                time(class='search__date' datetime='2019-03-21T20:33') 21.03.2019, 20:33
+                a.search__link Huawei открыла в России путешествия на смартфон Mate 30 Pro без сервисов Google
+
 
