@@ -10,27 +10,11 @@ mainRouter.get(`/`, async (req, res) => {
   res.render(`main`, {articles});
 });
 
-mainRouter.get(`/my`, async (req, res) => {
-  const articles = await api.getArticles();
-  res.render(`my`, {articles});
-});
 
 mainRouter.get(`/comments`, async (req, res) => {
   const articles = await api.getArticles();
   const comments = articles.slice(0, 3).flatMap((article) => article.comments);
   res.render(`comments`, {comments});
-});
-
-mainRouter.get(`/my/comments`, async (req, res) => {
-  const articles = await api.getArticles();
-  const comments = articles.slice(0, 3).flatMap((article) => article.comments);
-  res.render(`comments`, {comments});
-});
-
-mainRouter.get(`/articles/edit/:articleId`, async (req, res) => {
-  const {articleId} = req.params;
-  const [article, categories] = await Promise.all([api.getArticle(articleId), api.getCategories()]);
-  res.render(`new-post`, {article, categories});
 });
 
 mainRouter.get(`/login`, (req, res) => res.render(`login`));
