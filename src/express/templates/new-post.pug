@@ -5,7 +5,7 @@ block content
     section
       .popup.popup--new-publication.popup--anti
         .new-publication
-          form(action='#' method='POST')
+          form(action='/articles/add' method='POST' enctype="multipart/form-data")
             .new-publication__header
               h1= article ? 'Редактирование' : 'Новая публикация'
               .new-publication__date-form
@@ -33,7 +33,7 @@ block content
                 .new-publication__category-wrapper
                   each category, index in categories
                     .new-publication__checkbox.new-publication__checkbox--auto
-                      input(type="checkbox" name=`category-${index}` id=`checkbox-${index}`)
+                      input(type="checkbox" name=`category` value=`${category}` id=`checkbox-${index}`)
                       label(for=`checkbox-${index}`)
                         wtf= category
                   a.new-publication__form-link.button.button--transparent(href='#') Добавить категорию
