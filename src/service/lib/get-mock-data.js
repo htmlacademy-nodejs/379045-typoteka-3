@@ -19,13 +19,11 @@ const getMockData = async () => {
   } catch (err) {
 
     if (err.code === FILE_ERROR) {
-      data = [];
+      return [];
     }
 
     throw err;
   }
-
-  return data;
 };
 
 module.exports = getMockData;
