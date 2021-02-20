@@ -41,6 +41,10 @@ const upload = multer({
 articlesRouter.post(`/add`, upload.single(`upload`), async (req, res) => {
   const {body, file} = req;
 
+  if (!file) {
+    res.redirect(`back`);
+  }
+
   const data = {
     id: nanoid(),
     img: file.filename,
@@ -48,7 +52,7 @@ articlesRouter.post(`/add`, upload.single(`upload`), async (req, res) => {
     createdDate: body.date,
     announce: body.announcement,
     fullText: body[`full-text`],
-    category: body.category,
+    category: body.category || [],
     comments: [],
   };
 
