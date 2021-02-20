@@ -2,7 +2,6 @@
 
 const fs = require(`fs`).promises;
 const {FILE_NAME} = require(`../../const`);
-const FILE_ERROR = `ENOENT`;
 
 let data = [];
 
@@ -17,12 +16,7 @@ const getMockData = async () => {
     data = !fileContent.length ? [] : JSON.parse(fileContent);
 
   } catch (err) {
-
-    if (err.code === FILE_ERROR) {
-      data = [];
-    }
-
-    throw err;
+    data = [];
   }
 
   return data;

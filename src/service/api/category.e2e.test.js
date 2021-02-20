@@ -1,7 +1,7 @@
 'use strict';
 
 const express = require(`express`);
-const request = require(`supertest`);
+const supertest = require(`supertest`);
 const category = require(`./category`);
 const DataService = require(`../data-service/category`);
 
@@ -16,7 +16,7 @@ describe(`API returns category list`, () => {
   let response;
 
   beforeAll(async () => {
-    response = await request(app).get(`/categories`);
+    response = await supertest(app).get(`/categories`);
   });
 
   test(`Status code 200`, () => expect(response.statusCode).toBe(HttpCode.OK));

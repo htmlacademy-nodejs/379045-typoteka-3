@@ -1,7 +1,7 @@
 'use strict';
 
 const express = require(`express`);
-const request = require(`supertest`);
+const supertest = require(`supertest`);
 
 const search = require(`./search`);
 const DataService = require(`../data-service/search`);
@@ -17,7 +17,7 @@ describe(`API returns article based on search query`, () => {
   let response;
 
   beforeAll(async () => {
-    response = await request(app)
+    response = await supertest(app)
       .get(`/search`)
       .query({
         query: `Рок — это протест`
@@ -31,7 +31,7 @@ describe(`API returns article based on search query`, () => {
   test(`Article has correct id`, () => expect(response.body[0].id).toBe(`YIUqHsKJNRdOsIWW6uyeM`));
 });
 
-test(`API returns code 404 if nothing is found`, () => request(app)
+test(`API returns code 404 if nothing is found`, () => supertest(app)
   .get(`/search`)
   .query({
     query: `Продам свою душу`
@@ -39,9 +39,9 @@ test(`API returns code 404 if nothing is found`, () => request(app)
   .expect(HttpCode.NOT_FOUND)
 );
 
-test(`API returns 400 when query string is absent`, () => request(app)
+test(`API returns 400 when query string is absent`, () => supertest(app)
     .get(`/search`)
-    .expect(HttpCode.BAD_REQUEST)
+    .expect(HttpCode.BAD_supertest)
 );
 
 
