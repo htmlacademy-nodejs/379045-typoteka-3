@@ -15,7 +15,7 @@ CREATE TABLE users(
 CREATE TABLE articles(
   id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   title varchar(255) NOT NULL,
-  announce varchar(255) text NOT NULL,
+  announce text NOT NULL,
   fullText text NOT NULL,
   picture varchar(50),
   user_id integer NOT NULL,
