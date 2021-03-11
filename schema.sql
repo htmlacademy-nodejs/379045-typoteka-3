@@ -1,6 +1,6 @@
 CREATE TABLE categories(
   id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  name varchar(255) NOT NULL
+  name varchar(255) UNIQUE NOT NULL
 );
 
 CREATE TABLE users(
