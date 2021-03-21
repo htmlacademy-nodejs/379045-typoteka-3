@@ -52,7 +52,7 @@ articlesRouter.post(`/add`, upload.single(`upload`), async (req, res) => {
     createdDate: body.date,
     announce: body.announcement,
     fullText: body[`full-text`],
-    category: body.category || [],
+    categories: body.category || [],
     comments: [],
   };
 

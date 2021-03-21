@@ -1,18 +1,11 @@
 'use strict';
-
 class CategoryService {
-  constructor(articles) {
-    this._articles = articles;
+  constructor(sequelize) {
+    this._Category = sequelize.models.Category;
   }
 
-  getAll() {
-    const categories = this._articles.reduce((acc, article) => {
-      acc.add(...article.category);
-
-      return acc;
-    }, new Set());
-
-    return [...categories];
+  async findAll() {
+    return this._Category.findAll({raw: true});
   }
 
 }
