@@ -15,3 +15,6 @@ node_modules/
 build/
 upload/
 mocks.json
+
+# Файл с переменными окружения
+.env
