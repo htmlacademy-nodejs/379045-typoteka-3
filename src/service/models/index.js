@@ -16,7 +16,6 @@ const define = (sequelize) => {
   Article.hasMany(Comment, {as: Alias.COMMENTS, foreignKey: `articleId`});
   Comment.belongsTo(Article, {foreignKey: `articleId`});
 
-
   ArticleCategory.init({}, {sequelize});
 
   Article.belongsToMany(Category, {through: ArticleCategory, as: Alias.CATEGORIES});
