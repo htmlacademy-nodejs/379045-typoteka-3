@@ -12,7 +12,7 @@ class ArticleService {
   async create(data) {
     const article = await this._Article.create(data);
     await article.addCategories(data.categories);
-    return article.get();
+    return article;
   }
 
   async drop(id) {

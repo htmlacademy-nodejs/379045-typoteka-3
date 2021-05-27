@@ -46,7 +46,6 @@ articlesRouter.post(`/add`, upload.single(`upload`), async (req, res) => {
   }
 
   const data = {
-    id: nanoid(),
     img: file.filename,
     title: body.title,
     createdDate: body.date,
