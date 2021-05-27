@@ -10,6 +10,12 @@ block content
         p.main-page__empty-text Здесь пока пусто!
   else
     main.main-page.main-page--padding
+      section.main-page__theme-list
+        h2.visually-hidden Список тем
+        ul.themes
+          each category in categories
+            li.themes__item
+              a.themes__item-link= category.name
       section.main-page__notes.notes
         h1.notes__title Мои записи
         ul.notes__list
