@@ -15,7 +15,7 @@ module.exports = (app, service) => {
       return res.status(HttpCode.BAD_REQUEST).json([]);
     }
 
-    const searchResults = await service.getAll(query);
+    const searchResults = await service.findAll(query);
     const searchStatus = searchResults.length > 0 ? HttpCode.OK : HttpCode.NOT_FOUND;
 
     return res.status(searchStatus).json(searchResults);
