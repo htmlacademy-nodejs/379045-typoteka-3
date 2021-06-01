@@ -36,15 +36,13 @@ module.exports = (app, service, commentService) => {
   route.put(`/:articleId`, articleValidator, async (req, res) => {
     const {articleId} = req.params;
 
-    const existArticle = await service.findOne(articleId);
+    const updated = await service.update(articleId, req.body);
 
-    if (!existArticle) {
+    if (!updated) {
       return res.status(HttpCode.NOT_FOUND).send(`Not found with ${articleId}`);
     }
 
-    const updatedArticle = await service.update(articleId, req.body);
-
-    return res.status(HttpCode.OK).json(updatedArticle);
+    return res.status(HttpCode.OK).json(`Updated`);
 
   });
 
@@ -63,10 +61,6 @@ module.exports = (app, service, commentService) => {
   route.get(`/:articleId/comments`, async (req, res) => {
     const {articleId} = req.params;
     const comments = await commentService.findAll(articleId);
-
-    if (!comments) {
-      return res.status(HttpCode.NOT_FOUND).send(`Not found with ${articleId}`);
-    }
 
     return res.status(HttpCode.OK).json(comments);
 
