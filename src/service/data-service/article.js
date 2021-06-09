@@ -1,65 +1,45 @@
 'use strict';
 
-const {nanoid} = require(`nanoid`);
+const Alias = require(`../models/alias`);
 
 class ArticleService {
-  constructor(articles) {
-    this._articles = articles;
+  constructor(sequelize) {
+    this._Article = sequelize.models.Article;
+    this._Comment = sequelize.models.Comment;
+    this._Category = sequelize.models.Category;
   }
 
-  getAll() {
-    return this._articles.slice();
+  async create(data) {
+    const article = await this._Article.create(data);
+    await article.addCategories(data.categories);
+    return article;
   }
 
-  getOne(id) {
-    return this._articles.find((article) => article.id === id);
+  async drop(id) {
+    const deletedRows = await this._Article.destroy({
+      where: {id}
+    });
+    return !!deletedRows;
   }
 
-  getComments(postId) {
-    const post = this.getOne(postId);
-
-    return post.comments;
+  findOne(id) {
+    return this._Article.findByPk(id, {include: [Alias.CATEGORIES]});
   }
 
-  create(post) {
-    const newPost = Object.assign({id: nanoid(), comments: []}, post);
-    this._articles.push(newPost);
-
-    return newPost;
+  async update(id, article) {
+    const [affectedRows] = await this._Article.update(article, {
+      where: {id}
+    });
+    return !!affectedRows;
   }
 
-  createComment(id, comment) {
-    const post = this.getOne(id);
-    comment.id = nanoid();
-    post.comments.push(comment);
-
-    return comment;
-  }
-
-  update(id, post) {
-    const oldPost = this.getOne(id);
-
-    return Object.assign(oldPost, post);
-  }
-
-  delete(id) {
-    const index = this._articles.findIndex((article) => article.id === id);
-
-    const deletedPost = this._articles.splice(index, 1);
-
-    return deletedPost[0];
-  }
-
-  deleteComment(postId, commentId) {
-    const post = this.getOne(postId);
-    const commentIndex = post.comments.findIndex((comment) => comment.id === commentId);
-    let deletedComment;
-
-    if (commentIndex > -1) {
-      deletedComment = post.comments.splice(commentIndex, 1);
+  async findAll(needComments) {
+    const include = [Alias.CATEGORIES];
+    if (needComments) {
+      include.push(Alias.COMMENTS);
     }
-
-    return deletedComment[0];
+    const articles = await this._Article.findAll({include});
+    return articles.map((item) => item.get());
   }
 
 }

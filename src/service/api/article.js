@@ -4,20 +4,21 @@ const {Router} = require(`express`);
 const {HttpCode} = require(`../../const`);
 const articleValidator = require(`../middlewares/article-validator`);
 
-module.exports = (app, service) => {
+module.exports = (app, service, commentService) => {
 
   const route = new Router();
 
   app.use(`/articles`, route);
 
-  route.get(`/`, (req, res) => {
-    const articles = service.getAll();
+  route.get(`/`, async (req, res) => {
+    const {comments} = req.query;
+    const articles = await service.findAll(comments);
     return res.status(HttpCode.OK).json(articles);
   });
 
-  route.get(`/:articleId`, (req, res) => {
+  route.get(`/:articleId`, async (req, res) => {
     const {articleId} = req.params;
-    const article = service.getOne(articleId);
+    const article = await service.findOne(articleId);
 
     if (!article) {
       return res.status(HttpCode.NOT_FOUND).send(`Not found with ${articleId}`);
@@ -26,30 +27,28 @@ module.exports = (app, service) => {
     return res.status(HttpCode.OK).send(article);
   });
 
-  route.post(`/`, articleValidator, (req, res) => {
-    const article = service.create(req.body);
+  route.post(`/`, articleValidator, async (req, res) => {
+    const article = await service.create(req.body);
 
     return res.status(HttpCode.CREATED).json(article);
   });
 
-  route.put(`/:articleId`, articleValidator, (req, res) => {
+  route.put(`/:articleId`, articleValidator, async (req, res) => {
     const {articleId} = req.params;
 
-    const existArticle = service.getOne(articleId);
+    const updated = await service.update(articleId, req.body);
 
-    if (!existArticle) {
+    if (!updated) {
       return res.status(HttpCode.NOT_FOUND).send(`Not found with ${articleId}`);
     }
 
-    const updatedArticle = service.update(articleId, req.body);
-
-    return res.status(HttpCode.OK).json(updatedArticle);
+    return res.status(HttpCode.OK).json(`Updated`);
 
   });
 
-  route.delete(`/:articleId`, (req, res) => {
+  route.delete(`/:articleId`, async (req, res) => {
     const {articleId} = req.params;
-    const article = service.delete(articleId);
+    const article = await service.drop(articleId);
 
     if (!article) {
       return res.status(HttpCode.NOT_FOUND).send(`Not found with ${articleId}`);
@@ -59,23 +58,19 @@ module.exports = (app, service) => {
 
   });
 
-  route.get(`/:articleId/comments`, (req, res) => {
+  route.get(`/:articleId/comments`, async (req, res) => {
     const {articleId} = req.params;
-    const comments = service.getComments(articleId);
-
-    if (!comments) {
-      return res.status(HttpCode.NOT_FOUND).send(`Not found with ${articleId}`);
-    }
+    const comments = await commentService.findAll(articleId);
 
     return res.status(HttpCode.OK).json(comments);
 
   });
 
-  route.delete(`/:articleId/comments/:commentId`, (req, res) => {
+  route.delete(`/:articleId/comments/:commentId`, async (req, res) => {
     const {articleId, commentId} = req.params;
 
     try {
-      const deletedComment = service.deleteComment(articleId, commentId);
+      const deletedComment = await commentService.drop(commentId);
       return res.status(HttpCode.OK).json(deletedComment);
     } catch (err) {
       return res.status(HttpCode.NOT_FOUND).send(`Not found with ${articleId}`);
@@ -83,11 +78,11 @@ module.exports = (app, service) => {
 
   });
 
-  route.post(`/:articleId/comments`, (req, res) => {
+  route.post(`/:articleId/comments`, async (req, res) => {
     const {articleId} = req.params;
 
     try {
-      const newComment = service.createComment(articleId, req.body);
+      const newComment = await commentService.create(articleId, req.body);
       return res.status(HttpCode.OK).json(newComment);
     } catch (err) {
       return res.status(HttpCode.NOT_FOUND).send(`Not found with ${articleId}`);
