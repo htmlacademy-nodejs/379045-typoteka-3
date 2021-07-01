@@ -21,3 +21,4 @@ block content
         ul.notes__list
           each article in articles
             +createNote(article)
+    +pagination(page, totalPages, 2, `?`)

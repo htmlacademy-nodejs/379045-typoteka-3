@@ -42,6 +42,16 @@ class ArticleService {
     return articles.map((item) => item.get());
   }
 
+  async findPage({limit, offset}) {
+    const {count, rows} = await this._Article.findAndCountAll({
+      limit,
+      offset,
+      include: [Alias.CATEGORIES],
+      distinct: true
+    });
+    return {count, articles: rows};
+  }
+
 }
 
 module.exports = ArticleService;
