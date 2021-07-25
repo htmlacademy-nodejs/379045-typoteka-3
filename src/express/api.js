@@ -1,7 +1,7 @@
 'use strict';
 
 const axios = require(`axios`);
-const {HttpMethod} = require(`../const`);
+const HttpMethod = require(`../const`);
 
 const TIMEOUT = 1000;
 
@@ -49,6 +49,7 @@ class API {
       data
     });
   }
+
   createComment(id, data) {
     return this._load(`/articles/${id}/comments`, {
       method: HttpMethod.POST,

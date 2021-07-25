@@ -11,12 +11,13 @@ block content
             a.post__backwards.button.button--backwards(href='#') Назад
             time.post__date(datetime='2019-03-21T20:33') 21.03.2019, 20:33
             h2.post__title.title.title--main= article.title
-            ul.post__themes.themes
-              each category in categories
-                li.themes__item
-                  a.themes__item-link(href='#')= category.name
-                    sup 88
-                  button.themes__remove-btn(type='button') Удалить категорию
+            if categories
+              ul.post__themes.themes
+                each category in article.categories
+                  li.themes__item
+                    a.themes__item-link(href='#')= category.name
+                      sup 88
+                    button.themes__remove-btn(type='button') Удалить категорию
           .post__picture
             img(src='/img/sea-fullsize@1x.jpg' alt= article.title)
           .post__text
@@ -36,9 +37,10 @@ block content
                     time.comments__date(datetime='2019-03-21T20:33') 21.03.2019, 20:33
                   p.comments__message= comment.text
           .comments__footer.comments__footer--user
-            form(action='#' method='POST')
+            form(action=`/articles/${id}/comments` method='POST' enctype="application/x-www-form-urlencoded"
+             autocomplete="off")
               .comments__avatar.avatar
                 img(src='/img/avatar-2.png' alt='аватар пользователя')
               label
-                textarea(rows='1' name='message' placeholder='Присоединиться к обсуждению')
+                textarea(rows='1' name='comment' placeholder='Присоединиться к обсуждению')
               button.comments__button.button.button--colored(type='submit') Опубликовать

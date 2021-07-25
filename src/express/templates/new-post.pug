@@ -1,11 +1,14 @@
 extends layout.pug
 
+block vars
+  - var action = id ? `edit/${id}` : `add`;
+
 block content
   main
     section
       .popup.popup--new-publication.popup--anti
         .new-publication
-          form(action='/articles/add' method='POST' enctype="multipart/form-data")
+          form(action=`/articles/${action}` method='POST' enctype="multipart/form-data")
             .new-publication__header
               h1= article ? 'Редактирование' : 'Новая публикация'
               .new-publication__date-form
@@ -44,3 +47,5 @@ block content
                 .form__field.form__field--publication-text
                   label
                     textarea(rows='10' name='full-text' placeholder='Полный текст публикации')= article ? article.fullText : ''
+
+      +errorMessage(error)
