@@ -22,7 +22,7 @@ const HttpCode = {
   CREATED: 201
 };
 
-module.exports.HttpMethod = {
+const HttpMethod = {
   GET: `GET`,
   POST: `POST`,
   PUT: `PUT`,
@@ -42,5 +42,6 @@ module.exports = {
   HttpCode,
   FILE_NAME,
   API_PREFIX,
+  HttpMethod,
   Env
 };

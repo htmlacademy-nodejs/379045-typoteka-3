@@ -53,7 +53,7 @@ articlesRouter.post(`/add`, upload.single(`upload`), async (req, res) => {
     createdDate: body.date,
     announce: body.announcement,
     fullText: body[`full-text`],
-    categories: body.category || [],
+    categories: [...body.category] || [],
     comments: [],
   };
 
@@ -84,7 +84,7 @@ articlesRouter.post(`/edit/:id`, upload.single(`upload`), async (req, res) => {
     createdDate: body.date,
     announce: body.announcement,
     fullText: body[`full-text`],
-    categories: body.category || [],
+    categories: [...body.category] || [],
     comments: [],
   };
 
@@ -100,8 +100,9 @@ articlesRouter.post(`/edit/:id`, upload.single(`upload`), async (req, res) => {
 articlesRouter.get(`/:id`, async (req, res) => {
   const {id} = req.params;
   const {error} = req.query;
-  const article = await api.getArticle(id, true);
-  res.render(`post`, {article, error, id});
+  const [article, comments] = await Promise.all([api.getArticle(id, true), api.getComments(id)]);
+
+  res.render(`post`, {article, comments, error, id});
 });
 
 articlesRouter.post(`/:id/comments`, async (req, res) => {

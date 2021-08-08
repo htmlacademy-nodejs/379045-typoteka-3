@@ -10,6 +10,8 @@ const schema = Joi.object({
   categories: Joi.array().items(Joi.number().integer().positive()).min(1).required(),
   announce: Joi.string().min(10).max(50).required(),
   fullText: Joi.string().min(50).max(1000).required(),
+  createdDate: Joi.string().required(),
+  comments: Joi.array()
 });
 
 module.exports = (req, res, next) => {
