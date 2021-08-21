@@ -48,13 +48,12 @@ articlesRouter.post(`/add`, upload.single(`upload`), async (req, res) => {
   const {body, file} = req;
 
   const data = {
-    img: file ? file.filename : ``,
+    picture: file ? file.filename : ``,
     title: body.title,
     createdDate: body.date,
     announce: body.announcement,
     fullText: body[`full-text`],
-    categories: [...body.category] || [],
-    comments: [],
+    categories: [...body.category] || []
   };
 
   try {
@@ -71,6 +70,7 @@ articlesRouter.get(`/edit/:id`, async (req, res) => {
   const {error} = req.query;
   const action = `/articles/edit/${id}`;
   const [article, categories] = await Promise.all([api.getArticle(id), api.getCategories()]);
+
   res.render(`new-post`, {article, categories, id, error, action});
 });
 
@@ -79,13 +79,12 @@ articlesRouter.post(`/edit/:id`, upload.single(`upload`), async (req, res) => {
   const {id} = req.params;
 
   const data = {
-    img: file ? file.filename : ``,
+    picture: file ? file.filename : body[`old-image`],
     title: body.title,
     createdDate: body.date,
     announce: body.announcement,
     fullText: body[`full-text`],
-    categories: [...body.category] || [],
-    comments: [],
+    categories: [...body.category] || []
   };
 
   try {

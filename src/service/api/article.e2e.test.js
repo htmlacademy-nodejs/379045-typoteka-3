@@ -101,13 +101,12 @@ describe(`API creates an article if data is valid`, () => {
   let app;
 
   const newArticle = {
-    img: `4aCLmePX5q.png`,
+    picture: `4aCLmePX5q.png`,
     title: `Новая публикация`,
     createdDate: `2020-10-21`,
     announce: `Новая публикацияНовая публикация`,
     fullText: `Новая публикацияНовая публикацияНовая публикацияНовая публикацияНовая публикацияНовая публикация`,
-    categories: [1],
-    comments: []
+    categories: [1]
   };
 
   beforeAll(async () => {
@@ -127,13 +126,12 @@ describe(`API changes existent article`, () => {
   let app;
 
   const newArticle = {
-    img: `4aCLmePX5q.png`,
+    picture: `4aCLmePX5q.png`,
     title: `Новая публикация`,
     createdDate: `2020-10-21`,
     announce: `Новая публикацияНовая публикация`,
     fullText: `Новая публикацияНовая публикацияНовая публикацияНовая публикацияНовая публикацияНовая публикация`,
-    categories: [1],
-    comments: []
+    categories: [1]
   };
 
   beforeAll(async () => {
@@ -153,13 +151,12 @@ test(`API returns status code 404 when trying to change non-existent article`, a
   const app = await createApi();
 
   const newArticle = {
-    img: `4aCLmePX5q.png`,
+    picture: `4aCLmePX5q.png`,
     title: `Новая публикация`,
     createdDate: `2020-10-21`,
     announce: `Новая публикацияНовая публикация`,
     fullText: `Новая публикацияНовая публикацияНовая публикацияНовая публикацияНовая публикацияНовая публикация`,
     categories: [1],
-    comments: []
   };
 
   return supertest(app).put(`/articles/none`).send(newArticle).expect(HttpCode.NOT_FOUND);

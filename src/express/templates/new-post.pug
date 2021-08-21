@@ -28,7 +28,14 @@ block content
                     input(type='text' name='title' placeholder='Заголовок' required='' value= article ? article.title : '')
                 .form__field.form__field--post-image
                   label
-                    input#image-name-field(type='text' name='photo' placeholder='Фотография' readonly='' value= article ? article.img : '')
+                    input#image-name-field(
+                      type='text'
+                      name='photo'
+                      placeholder='Фотография'
+                      readonly=''
+                      value= article && article.picture ? article.picture : ''
+                    )
+                  input(type="hidden" name="old-image" value= article ? article.picture : '')
                   .form__image-loader.form__image-loader--publication
                     label
                       input.visually-hidden(type='file' name='upload')
@@ -36,7 +43,16 @@ block content
                 .new-publication__category-wrapper
                   each category in categories
                     .new-publication__checkbox.new-publication__checkbox--auto
-                      input(type="checkbox" name=`category` value=`${category.id}` id=`checkbox-${category.id}`)
+                      input(
+                        type="checkbox"
+                        name=`category`
+                        value=`${category.id}`
+                        id=`checkbox-${category.id}`
+                        checked= article
+                          ? article.categories.find(articleCategory => articleCategory.id === category.id)
+                          : false
+
+                      )
                       label(for=`checkbox-${category.id}`)
                         wtf= category.name
                   a.new-publication__form-link.button.button--transparent(href='#') Добавить категорию
