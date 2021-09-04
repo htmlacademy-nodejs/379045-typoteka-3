@@ -22,6 +22,13 @@ const HttpCode = {
   CREATED: 201
 };
 
+const HttpMethod = {
+  GET: `GET`,
+  POST: `POST`,
+  PUT: `PUT`,
+  DELETE: `DELETE`
+};
+
 const Env = {
   DEVELOPMENT: `development`,
   PRODUCTION: `production`
@@ -35,5 +42,6 @@ module.exports = {
   HttpCode,
   FILE_NAME,
   API_PREFIX,
+  HttpMethod,
   Env
 };

@@ -101,11 +101,12 @@ describe(`API creates an article if data is valid`, () => {
   let app;
 
   const newArticle = {
-    categories: [1, 2],
-    title: `Article title`,
-    announce: `Article announce`,
-    fullText: `Article full text!`,
-    img: `art.jpg`,
+    picture: `4aCLmePX5q.png`,
+    title: `Новая публикация`,
+    createdDate: `2020-10-21`,
+    announce: `Новая публикацияНовая публикация`,
+    fullText: `Новая публикацияНовая публикацияНовая публикацияНовая публикацияНовая публикацияНовая публикация`,
+    categories: [1]
   };
 
   beforeAll(async () => {
@@ -125,11 +126,12 @@ describe(`API changes existent article`, () => {
   let app;
 
   const newArticle = {
-    categories: [1, 2],
-    title: `Article title`,
-    announce: `Article announce`,
-    fullText: `Article full text!`,
-    img: `art.jpg`,
+    picture: `4aCLmePX5q.png`,
+    title: `Новая публикация`,
+    createdDate: `2020-10-21`,
+    announce: `Новая публикацияНовая публикация`,
+    fullText: `Новая публикацияНовая публикацияНовая публикацияНовая публикацияНовая публикацияНовая публикация`,
+    categories: [1]
   };
 
   beforeAll(async () => {
@@ -141,22 +143,8 @@ describe(`API changes existent article`, () => {
 
   test(`Article is really changed`, () => supertest(app)
     .get(`/articles/2`)
-    .expect((res) => expect(res.body.title).toBe(`Article title`))
+    .expect((res) => expect(res.body.title).toBe(`Новая публикация`))
   );
-});
-
-test(`API returns status code 404 when trying to change non-existent article`, async () => {
-  const app = await createApi();
-
-  const newArticle = {
-    title: `Article title`,
-    announce: `Article announce`,
-    fullText: `Article full text!`,
-    img: `art.jpg`,
-    categories: [2]
-  };
-
-  return supertest(app).put(`/articles/none`).send(newArticle).expect(HttpCode.NOT_FOUND);
 });
 
 describe(`API correctly deletes an article`, () => {

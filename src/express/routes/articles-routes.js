@@ -38,45 +38,82 @@ const upload = multer({
   }
 });
 
+articlesRouter.get(`/add`, async (req, res) => {
+  const {error} = req.query;
+  const categories = await api.getCategories();
+  res.render(`new-post`, {categories, error});
+});
+
 articlesRouter.post(`/add`, upload.single(`upload`), async (req, res) => {
   const {body, file} = req;
 
-  if (!file) {
-    res.redirect(`back`);
-  }
-
   const data = {
-    img: file.filename,
+    picture: file ? file.filename : ``,
     title: body.title,
     createdDate: body.date,
     announce: body.announcement,
     fullText: body[`full-text`],
-    categories: body.category || [],
-    comments: [],
+    categories: [...body.category] || []
   };
 
   try {
     await api.createArticle(data);
     res.redirect(`/my`);
   } catch (err) {
-    res.redirect(`back`);
+    res.redirect(`/articles/add?error=${encodeURIComponent(err.response.data)}`);
   }
 
 });
 
-articlesRouter.get(`/add`, async (req, res) => {
-  const categories = await api.getCategories();
-  res.render(`new-post`, {categories});
+articlesRouter.get(`/edit/:id`, async (req, res) => {
+  const {id} = req.params;
+  const {error} = req.query;
+  const action = `/articles/edit/${id}`;
+  const [article, categories] = await Promise.all([api.getArticle(id), api.getCategories()]);
+
+  res.render(`new-post`, {article, categories, id, error, action});
 });
 
-articlesRouter.get(`/edit/:id`, async (req, res) => {
-  const [article, categories] = await Promise.all([api.getArticle(req.params.id), api.getCategories()]);
-  res.render(`new-post`, {article, categories});
+articlesRouter.post(`/edit/:id`, upload.single(`upload`), async (req, res) => {
+  const {body, file} = req;
+  const {id} = req.params;
+
+  const data = {
+    picture: file ? file.filename : body[`old-image`],
+    title: body.title,
+    createdDate: body.date,
+    announce: body.announcement,
+    fullText: body[`full-text`],
+    categories: [...body.category] || []
+  };
+
+  try {
+    await api.editArticle(id, data);
+    res.redirect(`/my`);
+  } catch (err) {
+    res.redirect(`/articles/edit/${id}?error=${encodeURIComponent(err.response.data)}`);
+  }
+
 });
 
 articlesRouter.get(`/:id`, async (req, res) => {
-  const [article, categories] = await Promise.all([api.getArticle(req.params.id), api.getCategories()]);
-  res.render(`post`, {article, categories});
+  const {id} = req.params;
+  const {error} = req.query;
+  const [article, comments] = await Promise.all([api.getArticle(id, true), api.getComments(id)]);
+
+  res.render(`post`, {article, comments, error, id});
+});
+
+articlesRouter.post(`/:id/comments`, async (req, res) => {
+  const {id} = req.params;
+  const {comment} = req.body;
+
+  try {
+    await api.createComment(id, {text: comment});
+    res.redirect(`/articles/${id}`);
+  } catch (error) {
+    res.redirect(`/articles/${id}?error=${encodeURIComponent(error.response.data)}`);
+  }
 });
 
 module.exports = articlesRouter;

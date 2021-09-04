@@ -42,6 +42,9 @@ mixin pagination(page, totalPages, width, prefix)
         li
           a.pagination__button.button.button--forward(href=`${prefix}page=${page + 1}` aria-label='Страница вперед') Вперед
 
+mixin errorMessage(message)
+  if message
+    .server-error= message
 
 doctype html
 html(lang='ru')
@@ -55,6 +58,17 @@ html(lang='ru')
     link(rel='preload' href='/fonts/Inter-Medium.woff2' as='font' crossorigin='anonymous')
     link(rel='preload' href='/fonts/SFProDisplay-Regular.woff2' as='font' crossorigin='anonymous')
     link(rel='stylesheet' href='/css/style.min.css')
+    style.
+      a.active{
+        pointer-events: none;
+      }
+      .server-error{
+        border-radius: 10px;
+        color: white;
+        background-color: tomato;
+        margin: 20px 0;
+        padding: 10px;
+      }
   body
     div(class= isWrapperColor ? 'wrapper-color' : 'wrapper')
       include partials/header.pug

@@ -1,18 +1,16 @@
 'use strict';
 
-const {HttpCode} = require(`../../const`);
+const Joi = require(`joi`);
 
-const articleKeys = [`title`, `img`, `categories`, `announce`, `fullText`];
+const validator = require(`../lib/validator`);
 
-module.exports = (req, res, next) => {
-  const newArticle = req.body;
-  const keys = Object.keys(newArticle);
-  const keysExists = articleKeys.every((key) => keys.includes(key));
+const schema = Joi.object({
+  title: Joi.string().min(10).max(100).required(),
+  picture: Joi.string(),
+  categories: Joi.array().items(Joi.number().integer().positive()).min(1).required(),
+  announce: Joi.string().min(10).max(50).required(),
+  fullText: Joi.string().min(50).max(1000).required(),
+  createdDate: Joi.string().required()
+});
 
-  if (!keysExists) {
-    res.status(HttpCode.BAD_REQUEST)
-      .send(`Bad request`);
-  }
-
-  next();
-};
+module.exports = validator(schema);

@@ -3,6 +3,8 @@
 const {Router} = require(`express`);
 const {HttpCode} = require(`../../const`);
 const articleValidator = require(`../middlewares/article-validator`);
+const commentValidator = require(`../middlewares/comment-validator`);
+const routeParamsValidator = require(`../middlewares/route-params-validator`);
 
 module.exports = (app, service, commentService) => {
 
@@ -22,7 +24,7 @@ module.exports = (app, service, commentService) => {
     return res.status(HttpCode.OK).json(result);
   });
 
-  route.get(`/:articleId`, async (req, res) => {
+  route.get(`/:articleId`, routeParamsValidator, async (req, res) => {
     const {articleId} = req.params;
     const article = await service.findOne(articleId);
 
@@ -52,7 +54,7 @@ module.exports = (app, service, commentService) => {
 
   });
 
-  route.delete(`/:articleId`, async (req, res) => {
+  route.delete(`/:articleId`, routeParamsValidator, async (req, res) => {
     const {articleId} = req.params;
     const article = await service.drop(articleId);
 
@@ -64,7 +66,7 @@ module.exports = (app, service, commentService) => {
 
   });
 
-  route.get(`/:articleId/comments`, async (req, res) => {
+  route.get(`/:articleId/comments`, routeParamsValidator, async (req, res) => {
     const {articleId} = req.params;
     const comments = await commentService.findAll(articleId);
 
@@ -72,7 +74,7 @@ module.exports = (app, service, commentService) => {
 
   });
 
-  route.delete(`/:articleId/comments/:commentId`, async (req, res) => {
+  route.delete(`/:articleId/comments/:commentId`, routeParamsValidator, async (req, res) => {
     const {articleId, commentId} = req.params;
 
     try {
@@ -84,7 +86,7 @@ module.exports = (app, service, commentService) => {
 
   });
 
-  route.post(`/:articleId/comments`, async (req, res) => {
+  route.post(`/:articleId/comments`, commentValidator, async (req, res) => {
     const {articleId} = req.params;
 
     try {
