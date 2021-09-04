@@ -147,21 +147,6 @@ describe(`API changes existent article`, () => {
   );
 });
 
-test(`API returns status code 404 when trying to change non-existent article`, async () => {
-  const app = await createApi();
-
-  const newArticle = {
-    picture: `4aCLmePX5q.png`,
-    title: `Новая публикация`,
-    createdDate: `2020-10-21`,
-    announce: `Новая публикацияНовая публикация`,
-    fullText: `Новая публикацияНовая публикацияНовая публикацияНовая публикацияНовая публикацияНовая публикация`,
-    categories: [1],
-  };
-
-  return supertest(app).put(`/articles/none`).send(newArticle).expect(HttpCode.NOT_FOUND);
-});
-
 describe(`API correctly deletes an article`, () => {
   let response;
   let app;

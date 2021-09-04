@@ -5,7 +5,6 @@ const Alias = require(`../models/alias`);
 class ArticleService {
   constructor(sequelize) {
     this._Article = sequelize.models.Article;
-    this._Comment = sequelize.models.Comment;
     this._Category = sequelize.models.Category;
   }
 
@@ -26,11 +25,17 @@ class ArticleService {
     return this._Article.findByPk(id, {include: [Alias.CATEGORIES]});
   }
 
-  async update(id, article) {
-    const [affectedRows] = await this._Article.update(article, {
-      where: {id}
-    });
-    return !!affectedRows;
+  async update(id, data) {
+
+    const [article, categories] = await Promise.all([
+      this._Article.findOne({where: {id}}),
+      this._Category.findAll({where: {id: data.categories}})
+    ]);
+
+    await article.setCategories(categories);
+    await article.update(data);
+
+    return true;
   }
 
   async findAll(needComments) {
